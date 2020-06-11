@@ -11,9 +11,16 @@
         ctx = null;
     var lastPress = null;
     var pressing = [];
-    var pause;
+    var pause = true;
+    var gameover = true;
+    var score = 0;
     var player = new Rectangle(90, 280, 10, 10);
     var shots = [];
+    var enemies = [];
+
+    function random(max) {
+        return ~~(Math.random() * max);
+    }
 
     function init() {
         canvas = document.getElementById('canvas');
@@ -34,9 +41,23 @@
         paint(ctx);
     }
 
+    function reset() {
+        score = 0;
+        player.x = 90;
+        player.y = 280;
+        shots.length = 0;
+        enemies.length = 0;
+        enemies.push(new Rectangle(10, 0, 10, 10));
+        gameover = false;
+    }
+
+
     function act() {
         if (!pause) {
-            // Move Rect
+            // GameOver Reset
+            if (gameover)
+                reset();
+            // Move Player
             //if(pressing[KEY_UP])
             // player.y-=10;
             if (pressing[KEY_RIGHT])
@@ -59,11 +80,48 @@
             for (var i = 0, l = shots.length; i < l; i++) {
                 shots[i].y -= 10;
                 if (shots[i].y < 0) {
-                    shots.splice(i--, 1);
+                    shots.splice(i--, 1)
                     l--;
                 }
             }
+            // Move Enemies
+            for (var i = 0, l = enemies.length; i < l; i++) {
+                // Shot Intersects Enemy
+                for (var j = 0, ll = shots.length; j < ll; j++) {
+                    if (shots[j].intersects(enemies[i])) {
+                        score++;
+                        enemies[i].x = random(canvas.width / 10) * 10;
+                        enemies[i].y = 0;
+                        enemies.push(new Rectangle(random(canvas.width / 10) * 10, 0, 10, 10));
+                        shots.splice(j--, 1);
+                        ll--;
+                    }
+                }
+                enemies[i].y += 10;
+                if (enemies[i].y > canvas.height) {
+                    enemies[i].x = random(canvas.width / 10) * 10;
+                    enemies[i].y = 0;
+                }
+                // Player Intersects Enemy
+                if (player.intersects(enemies[i])) {
+                    gameover = true;
+                    pause = true;
+                }
+                // Shot Intersects Enemy
+                for (var j = 0, ll = shots.length; j < ll; j++) {
+                    if (shots[j].intersects(enemies[i])) {
+                        score++;
+                        enemies[i].x = random(canvas.width / 10) * 10;
+                        enemies[i].y = 0;
+                        enemies.push(new Rectangle(random(canvas.width / 10) * 10, 0, 10, 10));
+                        shots.splice(j--, 1);
+                        ll--;
+                    }
+                }
+            }
+
         }
+
         // Pause/Unpause
         if (lastPress == KEY_ENTER) {
             pause = !pause;
@@ -76,15 +134,22 @@
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = '#0f0';
         player.fill(ctx);
+        ctx.fillStyle = '#00f';
+        for (var i = 0, l = enemies.length; i < l; i++)
+            enemies[i].fill(ctx);
         ctx.fillStyle = '#f00';
         for (var i = 0, l = shots.length; i < l; i++)
             shots[i].fill(ctx);
         ctx.fillStyle = '#fff';
-        ctx.fillText('Last Press: ' + lastPress, 0, 20);
-        ctx.fillText('Shots: ' + shots.length, 0, 30);
+        ctx.fillText('Score: ' + score, 0, 20);
+        //ctx.fillText('Last Press: '+lastPress,0,20);
+        //ctx.fillText('Shots: '+shots.length,0,30);
         if (pause) {
             ctx.textAlign = 'center';
-            ctx.fillText('PAUSE', 100, 150);
+            if (gameover)
+                ctx.fillText('GAME OVER', 100, 150);
+            else
+                ctx.fillText('PAUSE', 100, 150);
             ctx.textAlign = 'left';
         }
     }
