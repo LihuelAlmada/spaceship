@@ -16,14 +16,16 @@
     var score=0;
     var multishot=1;
     var aTimer=0;
+    var bgTimer=0;
     var player=new Rectangle(90,280,10,10,0,3);
     var shots=[];
     var enemies=[];
     var powerups=[];
     var messages=[];
-    var stars=[];
     var spritesheet=new Image();
+    var background=new Image();
     spritesheet.src='assets/spritesheet.png';
+    background.src='assets/nebula.jpg';
 
     function random(max){
         return ~~(Math.random()*max);
@@ -35,8 +37,6 @@
         canvas.width=200;
         canvas.height=300;
         
-        for(var i=0;i<200;i++)
-            stars.push(new Star(random(canvas.width),random(canvas.height),random(200)));
         run();
         repaint();
     }
@@ -125,16 +125,6 @@
                 }
             }
             
-            // Move Stars
-            for(var i=0,l=stars.length;i<l;i++){
-                stars[i].y++;
-                if(stars[i].y>canvas.height)
-                    stars[i].y=0;
-                stars[i].timer+=5;
-                if(stars[i].timer>200)
-                    stars[i].timer-=200;
-            }
-            
             // Move PowerUps
             for(var i=0,l=powerups.length;i<l;i++){
                 powerups[i].y+=5;
@@ -199,7 +189,7 @@
                 }
                 
                 // Player Intersects Enemy
-                if(player.intersects(enemies[i])&&player.timer <1){
+                if(player.intersects(enemies[i])&&player.timer<1){
                     player.health--;
                     player.timer=20;
                 }
@@ -232,10 +222,13 @@
                 }
             }
             
-            // Timer
+            // Timers
             aTimer+=deltaTime;
             if(aTimer>3600)
                 aTimer-=3600;
+            bgTimer++;
+            if(bgTimer>0)
+                bgTimer-=300;
             
             // Damaged
             if(player.timer>0)
@@ -255,14 +248,15 @@
     }
 
     function paint(ctx){
-        ctx.fillStyle='#000';
-        ctx.fillRect(0,0,canvas.width,canvas.height);
-        
-        for(var i=0,l=stars.length;i<l;i++){
-            var c=255-Math.abs(100-stars[i].timer);
-            ctx.fillStyle='rgb('+c+','+c+','+c+')';
-            ctx.fillRect(stars[i].x,stars[i].y,1,1);
+        if(background.width){
+            ctx.drawImage(background,0,bgTimer);
+            ctx.drawImage(background,0,300+bgTimer);
         }
+        else{
+            ctx.fillStyle='#000';
+            ctx.fillRect(0,0,canvas.width,canvas.height);
+        }
+        
         ctx.strokeStyle='#0f0';
         if(player.timer%2==0)
             //player.fill(ctx);
@@ -354,12 +348,6 @@
         this.string=(string==null)?'?':string;
         this.x=(x==null)?0:x;
         this.y=(y==null)?0:y;
-    }
-
-    function Star(x,y,timer){
-        this.x=(x==null)?0:x;
-        this.y=(y==null)?0:y;
-        this.timer=(timer==null)?0:timer;
     }
 
     window.requestAnimationFrame=(function(){
