@@ -24,8 +24,8 @@
     var messages=[];
     var spritesheet=new Image();
     var background=new Image();
-    spritesheet.src='assets/spritesheet.png';
-    background.src='assets/nebula.jpg';
+    spritesheet.src='./assets/spritesheet.png';
+    background.src='./assets/nebula.jpg';
 
     function random(max){
         return ~~(Math.random()*max);
