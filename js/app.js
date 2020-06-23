@@ -23,9 +23,9 @@
     var powerups=[];
     var messages=[];
     var spritesheet=new Image();
-    var background=new Image();
+    
     spritesheet.src='../assets/spritesheet.png';
-    background.src='../assets/nebula.jpg';
+    
 
     function random(max){
         return ~~(Math.random()*max);
@@ -68,7 +68,6 @@
         enemies.push(new Rectangle(150,0,10,10,0,2));
         gameover=false;
     }
-
     function act(deltaTime){
         if(!pause){
             // GameOver Reset
@@ -248,14 +247,10 @@
     }
 
     function paint(ctx){
-        if(background.width){
-            ctx.drawImage(background,0,bgTimer);
-            ctx.drawImage(background,0,300+bgTimer);
-        }
-        else{
+        
             ctx.fillStyle='#000';
             ctx.fillRect(0,0,canvas.width,canvas.height);
-        }
+        
         
         ctx.strokeStyle='#0f0';
         if(player.timer%2==0)
