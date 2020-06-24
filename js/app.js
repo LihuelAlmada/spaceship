@@ -1,5 +1,5 @@
-(function(){
-    'use strict';
+
+    'use strict'
     window.addEventListener('load',init,false);
     var KEY_ENTER=13;
     var KEY_SPACE=32;
@@ -351,4 +351,3 @@
             window.mozRequestAnimationFrame || 
             function(callback){window.setTimeout(callback,17);};
     })();
-})();
