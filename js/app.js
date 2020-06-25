@@ -1,12 +1,12 @@
 
     'use strict'
     window.addEventListener('load',init,false);
-    var KEY_ENTER=13;
-    var KEY_SPACE=32;
-    var KEY_LEFT=37;
-    var KEY_UP=38;
-    var KEY_RIGHT=39;
-    var KEY_DOWN=40;
+    const KEY_ENTER=13;
+    const KEY_SPACE=32;
+    const KEY_LEFT=37;
+    const KEY_UP=38;
+    const KEY_RIGHT=39;
+    const KEY_DOWN=40;
 
     var canvas=null,ctx=null;
     var lastPress=null;
@@ -345,9 +345,9 @@
         this.y=(y==null)?0:y;
     }
 
-    window.requestAnimationFrame=(function(){
+    /*window.requestAnimationFrame=(function(){
         return window.requestAnimationFrame || 
             window.webkitRequestAnimationFrame || 
             window.mozRequestAnimationFrame || 
             function(callback){window.setTimeout(callback,17);};
-    })();
+    })();*/
