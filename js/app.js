@@ -1,5 +1,5 @@
 
-    'use strict'
+   'use strict'
     window.addEventListener('load',init,false);
     const KEY_ENTER=13;
     const KEY_SPACE=32;
@@ -34,8 +34,8 @@
     function init(){
         canvas=document.getElementById('canvas');
         ctx=canvas.getContext('2d');
-        canvas.width=200;
-        canvas.height=300;
+        //canvas.width=200;
+        //canvas.height=300;
         
         run();
         repaint();
@@ -345,9 +345,9 @@
         this.y=(y==null)?0:y;
     }
 
-    /*window.requestAnimationFrame=(function(){
+    window.requestAnimationFrame=(function(){
         return window.requestAnimationFrame || 
             window.webkitRequestAnimationFrame || 
             window.mozRequestAnimationFrame || 
             function(callback){window.setTimeout(callback,17);};
-    })();*/
+    })();
