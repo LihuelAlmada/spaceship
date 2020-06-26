@@ -34,8 +34,8 @@
     function init(){
         canvas=document.getElementById('canvas');
         ctx=canvas.getContext('2d');
-        //canvas.width=200;
-        //canvas.height=300;
+        canvas.width=200;
+        canvas.height=300;
         
         run();
         repaint();
